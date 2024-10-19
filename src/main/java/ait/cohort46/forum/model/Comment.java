@@ -17,7 +17,7 @@ public class Comment {
     @Setter
     private String message;
     private LocalDateTime dateCreated = LocalDateTime.now();
-    private int likes;
+    private long likes;
 
     public Comment(String user, String message) {
         this.user = user;

@@ -3,7 +3,6 @@ package ait.cohort46.forum.service;
 import ait.cohort46.forum.dto.AddCommentDto;
 import ait.cohort46.forum.dto.AddPostDto;
 import ait.cohort46.forum.dto.PostDto;
-import ait.cohort46.forum.dto.UpdatePostDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
 public interface PostService {
     PostDto addPost(String user, AddPostDto addPostDto);
     PostDto findPostById(String postId);
-    PostDto updatePost(String postId, UpdatePostDto UpdatePostDto);
+    PostDto updatePost(String postId, AddPostDto addPostDto);
     PostDto deletePost(String postId);
 
     void addLike(String postId);

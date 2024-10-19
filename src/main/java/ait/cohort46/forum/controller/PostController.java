@@ -3,7 +3,6 @@ package ait.cohort46.forum.controller;
 import ait.cohort46.forum.dto.AddCommentDto;
 import ait.cohort46.forum.dto.AddPostDto;
 import ait.cohort46.forum.dto.PostDto;
-import ait.cohort46.forum.dto.UpdatePostDto;
 import ait.cohort46.forum.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,8 +28,8 @@ public class PostController {
     }
 
     @PatchMapping("/post/{postId}")
-    public PostDto updatePost(@PathVariable String postId, @RequestBody UpdatePostDto UpdatePostDto) {
-        return postService.updatePost(postId, UpdatePostDto);
+    public PostDto updatePost(@PathVariable String postId, @RequestBody AddPostDto addPostDto) {
+        return postService.updatePost(postId, addPostDto);
     }
 
     @DeleteMapping("/post/{postId}")

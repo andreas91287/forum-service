@@ -23,7 +23,7 @@ public class Post {
     private String author;
     private LocalDateTime dateCreated = LocalDateTime.now();
     private Set<String> tags = new HashSet<>();
-    private int likes;
+    private long likes;
     private List<Comment> comments = new ArrayList<>();
 
     public Post(String title, String content, String author, Set<String> tags) {

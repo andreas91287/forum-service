@@ -18,7 +18,7 @@ public class PostDto {
     private LocalDateTime dateCreated;
     @Singular
     private Set<String> tags;
-    private Integer likes;
+    private Long likes;
     @Singular
     private List<CommentDto> comments;
 
