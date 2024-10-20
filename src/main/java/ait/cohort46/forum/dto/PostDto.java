@@ -21,5 +21,4 @@ public class PostDto {
     private Long likes;
     @Singular
     private List<CommentDto> comments;
-
 }
