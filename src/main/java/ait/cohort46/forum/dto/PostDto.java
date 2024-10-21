@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Builder
 public class PostDto {
     private String id;

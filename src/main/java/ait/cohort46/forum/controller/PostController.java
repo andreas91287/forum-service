@@ -1,7 +1,7 @@
 package ait.cohort46.forum.controller;
 
 import ait.cohort46.forum.dto.AddCommentDto;
-import ait.cohort46.forum.dto.AddPostDto;
+import ait.cohort46.forum.dto.AddOrUpdatePostDto;
 import ait.cohort46.forum.dto.PostDto;
 import ait.cohort46.forum.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/post/{user}")
-    public PostDto addPost(@PathVariable String user, @RequestBody AddPostDto addPostDto) {
+    public PostDto addPost(@PathVariable String user, @RequestBody AddOrUpdatePostDto addPostDto) {
         return postService.addPost(user, addPostDto);
     }
 
@@ -28,7 +28,7 @@ public class PostController {
     }
 
     @PatchMapping("/post/{postId}")
-    public PostDto updatePost(@PathVariable String postId, @RequestBody AddPostDto addPostDto) {
+    public PostDto updatePost(@PathVariable String postId, @RequestBody AddOrUpdatePostDto addPostDto) {
         return postService.updatePost(postId, addPostDto);
     }
 

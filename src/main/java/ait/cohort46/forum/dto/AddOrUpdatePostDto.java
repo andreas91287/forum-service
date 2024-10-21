@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.Set;
 
 @Getter
-public class AddPostDto {
+public class AddOrUpdatePostDto {
     private String title;
     private String content;
     private Set<String> tags;

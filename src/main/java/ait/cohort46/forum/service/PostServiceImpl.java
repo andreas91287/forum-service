@@ -2,7 +2,7 @@ package ait.cohort46.forum.service;
 
 import ait.cohort46.forum.dao.PostRepository;
 import ait.cohort46.forum.dto.AddCommentDto;
-import ait.cohort46.forum.dto.AddPostDto;
+import ait.cohort46.forum.dto.AddOrUpdatePostDto;
 import ait.cohort46.forum.dto.PostDto;
 import ait.cohort46.forum.dto.excception.PostNotFoundException;
 import ait.cohort46.forum.model.Comment;
@@ -22,8 +22,8 @@ public class PostServiceImpl implements PostService {
     private final ModelMapper modelMapper;
 
     @Override
-    public PostDto addPost(String user, AddPostDto addPostDto) {
-        Post post = modelMapper.map(addPostDto, Post.class);
+    public PostDto addPost(String user, AddOrUpdatePostDto addOrUpdatePostDto) {
+        Post post = modelMapper.map(addOrUpdatePostDto, Post.class);
         post.setAuthor(user);
         post = postRepository.save(post);
         return modelMapper.map(post, PostDto.class);
@@ -36,16 +36,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto updatePost(String postId, AddPostDto addPostDto) {
+    public PostDto updatePost(String postId, AddOrUpdatePostDto addOrUpdatePostDto) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        String title = addPostDto.getTitle();
+        String title = addOrUpdatePostDto.getTitle();
         if (title != null) {
             post.setTitle(title);
         }
-        if (addPostDto.getContent() != null) {
-            post.setContent(addPostDto.getContent());
+        if (addOrUpdatePostDto.getContent() != null) {
+            post.setContent(addOrUpdatePostDto.getContent());
         }
-        Set<String> tags = addPostDto.getTags();
+        Set<String> tags = addOrUpdatePostDto.getTags();
         if (tags != null) {
             // tags.forEach(tag -> post.addTag(tag));
             tags.forEach(post::addTag);

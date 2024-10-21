@@ -1,16 +1,16 @@
 package ait.cohort46.forum.service;
 
 import ait.cohort46.forum.dto.AddCommentDto;
-import ait.cohort46.forum.dto.AddPostDto;
+import ait.cohort46.forum.dto.AddOrUpdatePostDto;
 import ait.cohort46.forum.dto.PostDto;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface PostService {
-    PostDto addPost(String user, AddPostDto addPostDto);
+    PostDto addPost(String user, AddOrUpdatePostDto addPostDto);
     PostDto findPostById(String postId);
-    PostDto updatePost(String postId, AddPostDto addPostDto);
+    PostDto updatePost(String postId, AddOrUpdatePostDto addPostDto);
     PostDto deletePost(String postId);
 
     void addLike(String postId);
