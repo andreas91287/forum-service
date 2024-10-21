@@ -6,6 +6,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.security.Principal;
 import java.util.Base64;
 
 @Component
+@RequiredArgsConstructor
 public class AuthentificationFilter implements Filter {
     private final UserAccountRepository repository;
 
@@ -22,9 +24,6 @@ public class AuthentificationFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
-//        System.out.println(request.getMethod());
-//        System.out.println(request.getServletPath());
-//        System.out.println(request.getHeader("Authorization"));
 
         if (checkEndpoint(request.getMethod(), request.getServletPath())) {
             // Credential - Berechtigung

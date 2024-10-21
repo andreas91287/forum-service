@@ -13,7 +13,6 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-// @RequestMapping("/{baseUrl}")
 @RequestMapping("/account")
 public class UserAccountController {
     private final UserAccountService userAccountService;
@@ -23,13 +22,11 @@ public class UserAccountController {
         return userAccountService.register(userRegisterDto);
     }
 
-    // TODO
     @PostMapping("/login")
     public UserDto login(Principal principal) {
-        return userAccountService.login(principal.getName());
+        return userAccountService.getUser(principal.getName());
     }
 
-    // TODO
     @PatchMapping("/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void changePassword(Principal principal, @RequestHeader("X-Password") String newPassword) {
