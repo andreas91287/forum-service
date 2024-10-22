@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
+@Order(10)
 public class AuthentificationFilter implements Filter {
     private final UserAccountRepository repository;
 
