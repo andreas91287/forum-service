@@ -1,8 +1,7 @@
 package ait.cohort46.security.filter;
 
-import ait.cohort46.accounting.dao.UserAccountRepository;
-import ait.cohort46.accounting.model.Role;
-import ait.cohort46.accounting.model.UserAccount;
+import ait.cohort46.forum.dao.PostRepository;
+import ait.cohort46.forum.model.Post;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,21 +14,25 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-@Order(40)
-public class UserDeleteFilter implements Filter {
-    private final UserAccountRepository repository;
+@Order(50)
+public class UpdatePostFilter implements Filter {
+    private final PostRepository repository;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
-
         if (checkEndpoint(request.getMethod(), request.getServletPath())) {
-            UserAccount user = repository.findById(request.getUserPrincipal().getName()).get();
-            String[] arr = request.getServletPath().split("/");
-            String owner = arr[arr.length - 1];
-            if (user.getRoles().contains(Role.ADMINISTRATOR) || user.getLogin().equalsIgnoreCase(owner)) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            String principal = request.getUserPrincipal().getName();
+            String[] parts = request.getServletPath().split("/");
+            String postId = parts[parts.length - 1];
+            Post post = repository.findById(postId).orElse(null);
+            if (post == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+            if (!principal.equals(post.getAuthor())) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN); // 404
                 return;
             }
         }
@@ -37,6 +40,6 @@ public class UserDeleteFilter implements Filter {
     }
 
     private boolean checkEndpoint(String method, String path) {
-        return HttpMethod.DELETE.matches(method) && path.matches("/account/user/\\w+");
+        return (HttpMethod.PATCH.matches(method) && path.matches("/forum/post/\\w+"));
     }
 }
