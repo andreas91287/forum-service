@@ -7,18 +7,25 @@ import ait.cohort46.accounting.dto.RolesDto;
 import ait.cohort46.accounting.dto.UserDto;
 import ait.cohort46.accounting.dto.exception.UserExistsException;
 import ait.cohort46.accounting.dto.exception.UserNotFoundException;
+import ait.cohort46.accounting.model.Role;
 import ait.cohort46.accounting.model.UserAccount;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
-public class UserAccountServiceImpl implements UserAccountService {
+public class UserAccountServiceImpl implements UserAccountService, CommandLineRunner {
     private final UserAccountRepository userAccountRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    @Value("${password.period:30}")
+    private long passwordPeriod;
 
     @Override
     public UserDto register(UserRegisterDto userRegisterDto) {
@@ -28,6 +35,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         UserAccount userAccount = modelMapper.map(userRegisterDto, UserAccount.class);
         String password = passwordEncoder.encode(userRegisterDto.getPassword());
         userAccount.setPassword(password);
+        userAccount.setPasswordExpDate(LocalDate.now().plusDays(passwordPeriod));
         userAccountRepository.save(userAccount);
         return modelMapper.map(userAccount, UserDto.class);
     }
@@ -37,6 +45,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         UserAccount userAccount = userAccountRepository.findById(login).orElseThrow(UserNotFoundException::new);
         String password = passwordEncoder.encode(newPassword);
         userAccount.setPassword(password);
+        userAccount.setPasswordExpDate(LocalDate.now().plusDays(passwordPeriod));
         userAccountRepository.save(userAccount);
     }
 
@@ -79,5 +88,16 @@ public class UserAccountServiceImpl implements UserAccountService {
             userAccountRepository.save(userAccount);
         }
         return modelMapper.map(userAccount, RolesDto.class);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        if (!userAccountRepository.existsById("admin")) {
+            String password = passwordEncoder.encode("admin");
+            UserAccount userAccount = new UserAccount("admin", "", "", password);
+            userAccount.addRole(Role.MODERATOR.name());
+            userAccount.addRole(Role.ADMINISTRATOR.name());
+            userAccountRepository.save(userAccount);
+        }
     }
 }

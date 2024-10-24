@@ -7,6 +7,7 @@ import ait.cohort46.forum.dto.PostDto;
 import ait.cohort46.forum.dto.excception.PostNotFoundException;
 import ait.cohort46.forum.model.Comment;
 import ait.cohort46.forum.model.Post;
+import ait.cohort46.forum.service.logging.PostLogger;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -36,14 +37,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @PostLogger
     public PostDto updatePost(String postId, AddOrUpdatePostDto addOrUpdatePostDto) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         String title = addOrUpdatePostDto.getTitle();
         if (title != null) {
             post.setTitle(title);
         }
-        if (addOrUpdatePostDto.getContent() != null) {
-            post.setContent(addOrUpdatePostDto.getContent());
+        String content = addOrUpdatePostDto.getContent();
+        if (content != null) {
+            post.setContent(content);
         }
         Set<String> tags = addOrUpdatePostDto.getTags();
         if (tags != null) {
@@ -57,12 +60,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDto deletePost(String postId) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        // postRepository.deleteById(postId);
         postRepository.delete(post);
         return modelMapper.map(post, PostDto.class);
     }
 
     @Override
+    @PostLogger
     public void addLike(String postId) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         post.addLike();

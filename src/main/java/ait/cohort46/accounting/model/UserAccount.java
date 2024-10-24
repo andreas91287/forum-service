@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +21,8 @@ public class UserAccount {
     @Setter
     private String password;
     private Set<Role> roles;
+    @Setter
+    private LocalDate passwordExpDate;
 
     public UserAccount() {
         roles = new HashSet<>();
